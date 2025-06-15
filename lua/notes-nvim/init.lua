@@ -73,9 +73,7 @@ local function notes_save()
 	if current_note == nil then
 		vim.notify("Invalid buffer to save!", vim.log.levels.ERROR)
 		return
-	elseif vim.api.nvim_win_is_valid(loaded_notes[current_note].floating.win) then
-		vim.notify("Windows hided, unable to save", vim.log.levels.WARN)
-	elseif vim.api.nvim_win_is_valid(loaded_notes[current_note].floating.win) then
+	elseif not vim.api.nvim_win_is_valid(loaded_notes[current_note].floating.win) then
 		vim.notify("Windows hided, unable to save", vim.log.levels.WARN)
 	else
 		vim.cmd(
@@ -108,14 +106,19 @@ local function notes_fzf()
 			prompt = "Notes >",
 			cwd = proj_dir .. "/notes",
 			cmd = "fd . -e " .. (settings.file_ext or "norg"),
+			file_icons = false,
 			actions = {
 				["default"] = function(selected)
-					local filename = selected[1]
-					local buf = vim.fn.bufadd(filename)
-					open_floating_note({}, buf)
+					local full = selected[1]
+					local name = full:gsub("%." .. (settings.file_ext or "norg") .. "$", "")
+					current_note = name
+					local buf = vim.fn.bufadd(proj_dir .. "/notes/" .. full)
+					loaded_notes[current_note] = open_floating_note({}, buf)
 				end,
 			},
 		})
+	else
+		vim.notify("FzfLua not found!", vim.log.levels.ERROR)
 	end
 end
 
