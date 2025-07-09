@@ -66,7 +66,10 @@ local function notes_new()
 	if vim.bo[loaded_notes[current_note].floating.buf].filetype ~= (settings.file_ext or "norg") then
 		vim.bo[loaded_notes[current_note].floating.buf].filetype = (settings.file_ext or "norg")
 	end
-	vim.cmd("silent write! " .. vim.fn.fnameescape(proj_dir .. "/notes/" .. current_note .. ".norg"))
+	vim.cmd(
+		"silent write! "
+			.. vim.fn.fnameescape(proj_dir .. "/notes/" .. current_note .. "." .. (settings.file_ext or "norg"))
+	)
 end
 
 local function notes_save()
