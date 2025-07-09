@@ -3,7 +3,7 @@ local settings = {} -- settings
 local M = {}
 
 function M.setup(user_settings)
-	settings = user_settings
+	settings = user_settings or {}
 end
 
 -- ---------- Funcs & todos ---------- --
