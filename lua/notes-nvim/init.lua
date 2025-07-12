@@ -129,7 +129,7 @@ if errno == true then
 		vim.cmd(
 			"silent write! "
 				.. vim.fn.fnameescape(
-					proj_dir .. "/notes/" .. "public" .. "/" .. current_note .. "." .. (settings.file_ext or "norg")
+					proj_dir .. "/notes/" .. "public" .. "/" .. pub_current_note .. "." .. (settings.file_ext or "norg")
 				)
 		)
 	end
@@ -337,7 +337,17 @@ if errno == true then
 						vim.cmd(
 							"silent write! "
 								.. vim.fn.fnameescape(
-									proj_dir .. "/notes/" .. name .. "." .. (settings.file_ext or "norg")
+									proj_dir .. "/notes/" .. settings.namespace .. "." .. (settings.file_ext or "norg")
+								)
+						)
+					end
+				end
+				for name, note in pairs(pub_loaded_notes) do
+					if args.buf == note.floating.buf then
+						vim.cmd(
+							"silent write! "
+								.. vim.fn.fnameescape(
+									proj_dir .. "/notes/public/" .. name .. "." .. (settings.file_ext or "norg")
 								)
 						)
 					end
